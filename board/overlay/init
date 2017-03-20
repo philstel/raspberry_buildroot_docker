@@ -1,0 +1,18 @@
+#!/bin/sh
+# devtmpfs does not get automounted for initramfs
+/bin/mount -t devtmpfs devtmpfs /dev
+
+# prepare the new root on sd card partition 2
+/bin/mkdir /newroot
+/bin/mount /dev/mmcblk0p2 /newroot
+/bin/rm -rf /newroot/*
+find . -xdev | cpio -H newc -o | { cd /newroot && cpio -m -i; }
+
+/bin/mount --move /sys /newroot/sys
+/bin/mount --move /dev /newroot/dev
+
+exec 0</newroot/dev/console
+exec 1>/newroot/dev/console
+exec 2>/newroot/dev/console
+
+exec /sbin/switch_root /newroot /sbin/init $*
