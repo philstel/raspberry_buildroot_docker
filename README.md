@@ -45,4 +45,4 @@ The build fails at the last step while building the first partition for the sd c
 
 The kernel (zImage) and rootfs (rootfs.cpio.gz) are stored in "<buildroot>/output/images". I uploaded them to AWS S3 to use them in my foreman setup.
 
-I also just learned, that in my current configuration the kernel is directly 
+I also just learned, that in my current configuration the rootfs is directly linked into the kernel image (zImage), which makes the kernel pretty large, but you don't need the `initrd=<path to rootfs.cpio.gz>` any more.
